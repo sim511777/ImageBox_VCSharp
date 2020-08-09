@@ -35,6 +35,12 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ShimLib.Controls">
+      <HintPath>..\libs\ShimLib.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="ShimLib.Util">
+      <HintPath>..\libs\ShimLib.Util.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -83,17 +89,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShimLib.Controls\ShimLib.Controls.csproj">
-      <Project>{5A452842-C463-487E-A18B-F8B16C9223BC}</Project>
-      <Name>ShimLib.Controls</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ShimLib.ImageBox\ShimLib.ImageBox.csproj">
       <Project>{EE2AD7FF-4482-4623-9488-9CDBE3A90E1E}</Project>
       <Name>ShimLib.ImageBox</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ShimLib.Util\ShimLib.Util.csproj">
-      <Project>{09cb1389-0344-43f5-9b6b-58afd91a71d6}</Project>
-      <Name>ShimLib.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

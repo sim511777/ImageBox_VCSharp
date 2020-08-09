@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ShimLib.Util">
-      <HintPath>..\ShimLib.Util\bin\Release\ShimLib.Util.dll</HintPath>
+      <HintPath>..\libs\ShimLib.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
