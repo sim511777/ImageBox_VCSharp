@@ -162,6 +162,23 @@ namespace ImageBoxTest {
             }
             pbxDraw.SetImgBuf(imgBuf, bw, bh, 1, true);
         }
+        
+        private unsafe void GenerateGradient() {
+            Util.FreeBuffer(ref imgBuf);
+            bytepp = 1;
+            bw = 511;
+            bh = 511;
+            long cb = (long)bw * bh;
+            imgBuf = Util.AllocBuffer(cb);
+            for (long y = 0; y < bh; y++) {
+                byte* ptr = (byte*)imgBuf + y * bw;
+                for (long x = 0; x < bw; x++) {
+                    var dist = Math.Sqrt((x - 255) * (x - 255) + (y - 255) * (y - 255));
+                    ptr[x] = (byte)(255 - Math.Min(Math.Max((int)Math.Round(dist, MidpointRounding.AwayFromZero), 0), 255));
+                }
+            }
+            pbxDraw.SetImgBuf(imgBuf, bw, bh, bytepp, true);
+        }
 
         private void pbxDraw_Paint(object sender, PaintEventArgs e) {
             if (rlbxTestMode.SelectedIndex == 1)
@@ -297,7 +314,7 @@ namespace ImageBoxTest {
         }
 
         private void btnGradient_Click(object sender, EventArgs e) {
-            LoadBitmap(Properties.Resources.gardient_8bit);
+            GenerateGradient();
         }
 
         private void bntLongImage_Click(object sender, EventArgs e) {
