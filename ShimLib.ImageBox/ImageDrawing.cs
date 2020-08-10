@@ -31,10 +31,7 @@ namespace ShimLib {
         public void DrawRectangle(PointF pt1, PointF pt2, Color col, bool fill = false) {
             var ptd1 = imgBox.ImgToDisp(pt1);
             var ptd2 = imgBox.ImgToDisp(pt2);
-            if (!fill)
-                Drawing.DrawRectangle(buf, bw, bh, ptd1.X, ptd1.Y, ptd2.X, ptd2.Y, col.ToArgb());
-            else
-                Drawing.FillRectangle(buf, bw, bh, ptd1.X, ptd1.Y, ptd2.X, ptd2.Y, col.ToArgb());
+            Drawing.DrawRectangle(buf, bw, bh, ptd1.X, ptd1.Y, ptd2.X, ptd2.Y, col.ToArgb(), fill);
         }
 
         public void DrawRectangle(float x1, float y1, float x2, float y2, Color col, bool fill = false) {
@@ -44,10 +41,7 @@ namespace ShimLib {
         public void DrawCircle(PointF pt, float r, Color col, bool fill = false) {
             var ptd = imgBox.ImgToDisp(pt);
             var rd = (int)(imgBox.GetZoomFactor() * r);
-            if (!fill)
-                Drawing.DrawCircle(buf, bw, bh, ptd.X, ptd.Y, rd, col.ToArgb());
-            else
-                Drawing.FillCircle(buf, bw, bh, ptd.X, ptd.Y, rd, col.ToArgb());
+            Drawing.DrawCircle(buf, bw, bh, ptd.X, ptd.Y, rd, col.ToArgb(), fill);
         }
 
         public void DrawCircle(float x, float y, float r, Color col, bool fill = false) {
@@ -124,7 +118,7 @@ namespace ShimLib {
         public void DrawStringWnd(string text, Point ptd, Color col, Color fillCol = default(Color)) {
             if (!fillCol.IsEmpty) {
                 Size size = imgBox.FontRender.MeasureString(text);
-                Drawing.FillRectangle(buf, bw, bh, ptd.X, ptd.Y, ptd.X + size.Width, ptd.Y + size.Height, fillCol.ToArgb());
+                Drawing.DrawRectangle(buf, bw, bh, ptd.X, ptd.Y, ptd.X + size.Width, ptd.Y + size.Height, fillCol.ToArgb(), true);
             }
             imgBox.FontRender.DrawString(text, buf, bw, bh, ptd.X, ptd.Y, col);
         }

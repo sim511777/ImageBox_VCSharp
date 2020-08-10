@@ -228,7 +228,7 @@ namespace ShimLib {
 
             var t0 = Util.GetTimeMs();
 
-            Drawing.DrawImageZoom(ImgBuf, ImgBW, ImgBH, dispBuf, dispBW, dispBH, PanX, PanY, GetZoomFactor(), ImgBytepp, this.BackColor.ToArgb(), BufIsFloat);
+            Drawing.DrawImageZoom(dispBuf, dispBW, dispBH, ImgBuf, ImgBW, ImgBH, PanX, PanY, GetZoomFactor(), ImgBytepp, this.BackColor.ToArgb(), BufIsFloat);
             var t1 = Util.GetTimeMs();
 
             var imgDraw = new ImageDrawing(this, dispBuf, dispBW, dispBH);
