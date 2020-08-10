@@ -48,6 +48,18 @@ namespace ShimLib {
             DrawCircle(new PointF(x, y), r, col, fill);
         }
 
+        public void DrawEllipse(PointF pt, float rx, float ry, Color col, bool fill = false) {
+            var ptd = imgBox.ImgToDisp(pt);
+            double zoom = imgBox.GetZoomFactor();
+            var rdx = (int)(zoom * rx);
+            var rdy = (int)(zoom * ry);
+            Drawing.DrawEllipse(buf, bw, bh, ptd.X, ptd.Y, rdx, rdy, col.ToArgb(), fill);
+        }
+
+        public void DrawEllipse(float x, float y, float rx, float ry, Color col, bool fill = false) {
+            DrawEllipse(new PointF(x, y), rx, ry, col, fill);
+        }
+
         public void DrawSquare(PointF pt, float size, Color col, bool fixSize, bool fill = false) {
             float sizeh = fixSize ? size * 0.5f / (float)imgBox.GetZoomFactor() : size * 0.5f;
             float x1 = pt.X - sizeh;

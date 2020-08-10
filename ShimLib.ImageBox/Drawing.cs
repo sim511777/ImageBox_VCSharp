@@ -123,6 +123,77 @@ namespace ShimLib {
             }
         }
 
+        public static unsafe void DrawEllipse(IntPtr buf, int bw, int bh, int cx, int cy, int rx, int ry, int iCol, bool fill) {
+            int x1 = cx - rx;
+            int x2 = cx + rx;
+            int y1 = cy - ry;
+            int y2 = cy + ry;
+            if (x1 >= bw || x2 < 0 || y1 >= bh || y2 < 0)
+                return;
+
+            int* ptr = (int*)buf;
+
+            int h;
+            int a2 = rx * rx, b2 = ry * ry;
+            int a82 = 8 * a2, b82 = 8 * b2;
+            int x, y;
+            int deltaE, deltaNE;
+            x = 0;
+            y = ry;
+            h = 4 * b2 + a2 - 4 * a2 * ry;
+            deltaE = 12 * b2;
+            deltaNE = 12 * b2 - 8 * a2 * ry + 8 * a2;
+            while (b2 * x <= a2 * y) {
+                if (fill) {
+                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy + y, iCol);
+                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy - y, iCol);
+                } else {
+                    DrawPixel(ptr, bw, bh, cx + x, cy + y, iCol);
+                    DrawPixel(ptr, bw, bh, cx + x, cy - y, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy - y, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy + y, iCol);
+                }
+                if (h < 0) {    /* case E */
+                    h += deltaE;
+                    deltaE += b82;
+                    deltaNE += b82;
+                } else {   /* case NE */
+                    h += deltaNE;
+                    deltaE += b82;
+                    deltaNE += b82 + a82;
+                    y--;
+                }
+                x++;
+            }
+            x = rx;
+            y = 0;
+            h = 4 * a2 + a2 - 4 * rx * b2;
+            deltaE = 12 * a2;
+            deltaNE = 12 * a2 - 8 * b2 * rx + 8 * b2;
+            while (b2 * x > a2 * y) {
+                if (fill) {
+                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy + y, iCol);
+                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy - y, iCol);
+                } else {
+                    DrawPixel(ptr, bw, bh, cx + x, cy + y, iCol);
+                    DrawPixel(ptr, bw, bh, cx + x, cy - y, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy - y, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy + y, iCol);
+                }
+                if (h < 0) {   /* case E */
+                    h += deltaE;
+                    deltaE += a82;
+                    deltaNE += a82;
+                } else {   /* case NE */
+                    h += deltaNE;
+                    deltaE += a82;
+                    deltaNE += b82 + a82;
+                    x--;
+                }
+                y++;
+            }
+        }
+
         public static unsafe void DrawRectangle(IntPtr buf, int bw, int bh, int x1, int y1, int x2, int y2, int iCol, bool fill) {
             if (x1 > x2) Util.Swap(ref x1, ref x2);
             if (y1 > y2) Util.Swap(ref y1, ref y2);
