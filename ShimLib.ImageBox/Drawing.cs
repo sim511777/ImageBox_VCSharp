@@ -72,45 +72,54 @@ namespace ShimLib {
             }
             DrawPixel(ptr, bw, bh, x2, y2, iCol); // 끝점도 찍음
         }
-        
-        public static unsafe void DrawCircle(IntPtr buf, int bw, int bh, int cx, int cy, int radius, int iCol, bool fill) {
-            int x1 = cx - radius;
-            int x2 = cx + radius;
-            int y1 = cy - radius;
-            int y2 = cy + radius;
+
+        public static unsafe void DrawCircle(IntPtr buf, int bw, int bh, int cx, int cy, int r, int iCol, bool fill) {
+            int x1 = cx - r;
+            int x2 = cx + r;
+            int y1 = cy - r;
+            int y2 = cy + r;
             if (x1 >= bw || x2 < 0 || y1 >= bh || y2 < 0)
                 return;
-
+            
             int* ptr = (int*)buf;
 
-            int x = 0;
-            int y = radius;
-            int d = 1 - radius;
-
+            int h;
+            int x, y;
+            int deltaE, deltaNE;
+            x = 0;
+            y = r;
+            h = 1 - r;
+            deltaE = 3;
+            deltaNE = 5 - 2 * r;
             while (x <= y) {
                 if (fill) {
                     DrawHLine(ptr, bw, bh, cx - x, cx + x, cy + y, iCol);
-                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy - y, iCol);
                     DrawHLine(ptr, bw, bh, cx - y, cx + y, cy + x, iCol);
                     DrawHLine(ptr, bw, bh, cx - y, cx + y, cy - x, iCol);
+                    DrawHLine(ptr, bw, bh, cx - x, cx + x, cy - y, iCol);
                 } else {
                     DrawPixel(ptr, bw, bh, cx + x, cy + y, iCol);
-                    DrawPixel(ptr, bw, bh, cx + x, cy - y, iCol);
-                    DrawPixel(ptr, bw, bh, cx - x, cy + y, iCol);
-                    DrawPixel(ptr, bw, bh, cx - x, cy - y, iCol);
                     DrawPixel(ptr, bw, bh, cx + y, cy + x, iCol);
                     DrawPixel(ptr, bw, bh, cx + y, cy - x, iCol);
-                    DrawPixel(ptr, bw, bh, cx - y, cy + x, iCol);
+                    DrawPixel(ptr, bw, bh, cx + x, cy - y, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy - y, iCol);
                     DrawPixel(ptr, bw, bh, cx - y, cy - x, iCol);
+                    DrawPixel(ptr, bw, bh, cx - y, cy + x, iCol);
+                    DrawPixel(ptr, bw, bh, cx - x, cy + y, iCol);
                 }
-
-                ++x;
-                if (d < 0) {
-                    d += 2 * x + 1;
-                } else {
-                    --y;
-                    d += 2 * (x - y) + 3;
+                if (h < 0)    /* case E */
+                    {
+                    h += deltaE;
+                    deltaE += 2;
+                    deltaNE += 2;
+                } else    /* case NE */
+                      {
+                    h += deltaNE;
+                    deltaE += 2;
+                    deltaNE += 4;
+                    y--;
                 }
+                x++;
             }
         }
 
