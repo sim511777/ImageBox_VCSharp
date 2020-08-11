@@ -223,10 +223,18 @@ namespace ShimLib {
             Redraw();
         }
 
+        double t1_0 = 0;
+        double t2_1 = 0;
+        double t3_2 = 0;
+        double t4_3 = 0;
+        double t5_4 = 0;
+        double t6_5 = 0;
+        double t7_6 = 0;
+        double t7_0 = 0;
         public void Redraw() {
-            var dispRect = new Rectangle(0, 0, dispBW, dispBH);
-
             var t0 = Util.GetTimeMs();
+
+            var dispRect = new Rectangle(0, 0, dispBW, dispBH);
 
             Drawing.DrawImageZoom(dispBuf, dispBW, dispBH, ImgBuf, ImgBW, ImgBH, PanX, PanY, GetZoomFactor(), ImgBytepp, this.BackColor.ToArgb(), BufIsFloat);
             var t1 = Util.GetTimeMs();
@@ -276,17 +284,30 @@ ZoomLevelMin : {ZoomLevelMin}
 ZoomLevelMax : {ZoomLevelMax}
 
 == Draw time ==
-ZoomImage : {t1 - t0:0.0}ms
-DrawInfo : {t2 - t1:0.0}ms
-OnPaintBuffer : {t3 - t2:0.0}ms
-OnPaint : {t4 - t3:0.0}ms
-DrawImage : {t5 - t4:0.0}ms
-Total : {t5 - t0:0.0}ms
+ZoomImage : {t1_0:0.0}ms
+DrawInfo : {t2_1:0.0}ms
+OnPaintBuffer : {t3_2:0.0}ms
+OnPaint : {t4_3:0.0}ms
+DrawImage : {t5_4:0.0}ms
+DrawDebugInfo : {t6_5:0.0}ms
+Render : {t7_6:0.0}ms
+Total : {t7_0:0.0}ms
 ";
                 DrawDrawTime(ig, info);
             }
+            var t6 = Util.GetTimeMs();
 
             buffGfx.Render();
+            var t7 = Util.GetTimeMs();
+
+            t1_0 = t1 - t0;
+            t2_1 = t2 - t1;
+            t3_2 = t3 - t2;
+            t4_3 = t4 - t3;
+            t5_4 = t5 - t4;
+            t6_5 = t6 - t5;
+            t7_6 = t7 - t6;
+            t7_0 = t7 - t0;
         }
 
         // 백그라운 처리에서 아무것도 안하도록 함
